@@ -1,0 +1,8 @@
+# nuScenes (data not downloaded yet: needs ~124 GB; see README).
+_base_: default.yaml
+method: flow
+data:
+  dataset: nuscenes
+  root: data/nuscenes
+backbone:
+  ckpt: checkpoints/cofii2p/cofii2p_nuscenes.t7

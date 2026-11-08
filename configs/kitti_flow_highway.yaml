@@ -1,0 +1,6 @@
+# Highway hold-out (proposal Exp. 3): train on 00 + 02-08, test on 01.
+_base_: default.yaml
+method: flow
+data:
+  train_seqs: [0, 2, 3, 4, 5, 6, 7, 8]
+  test_seqs: [1]

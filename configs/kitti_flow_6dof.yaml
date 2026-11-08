@@ -1,0 +1,5 @@
+# Ablation: full SO(3) x R^3 flow (uniform SO(3) rotation prior, 3D Gaussian translation prior).
+_base_: default.yaml
+method: flow
+pose:
+  dof: 6dof

@@ -1,0 +1,6 @@
+# Matched unimodal baseline: same features/tokens/transformer, single-shot mean + full covariance.
+_base_: default.yaml
+method: gaussian
+model:
+  self_cond: false
+  point_select: topk

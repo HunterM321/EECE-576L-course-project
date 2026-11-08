@@ -1,0 +1,11 @@
+diff --git a/evaluation/eval_all.py b/evaluation/eval_all.py
+index 19ec21e..68aaabc 100755
+--- a/evaluation/eval_all.py
++++ b/evaluation/eval_all.py
+@@ -1,5 +1,5 @@
+ import os
+-os.environ["CUDA_VISIBLE_DEVICES"]="0"
++os.environ.setdefault("CUDA_VISIBLE_DEVICES", "0")
+ import torch
+ import argparse
+ import numpy as np

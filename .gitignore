@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+runs/
+results/**/*.npz
+results/**/upstream_eval_*/
+data/
+checkpoints/
+third_party/
+proposal/

@@ -1,0 +1,83 @@
+# Base config for I2P-Flow. Experiment configs inherit with `_base_: default.yaml`.
+# Override anything from the command line: `python scripts/train.py --config X.yaml train.lr=2e-4`.
+
+method: flow            # flow | gaussian   (the PnP-RANSAC baseline runs via scripts/evaluate.py --method pnp)
+seed: 0
+output_root: runs
+
+data:
+  dataset: kitti
+  root: data/kitti      # symlink -> /data/masibo/cofii2p/kitti
+  train_seqs: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+  test_seqs: [9, 10]
+  val_fraction: 0.05    # last 5% of each training sequence held out for validation / model selection
+  num_workers: 32       # CoFiI2P preprocessing is CPU-heavy (~0.6 s/frame/worker)
+  max_train_frames: null
+  max_val_frames: null
+  max_test_frames: null
+
+backbone:
+  ckpt: checkpoints/cofii2p/cofii2p_kitti.t7
+
+pose:
+  dof: 3dof             # 3dof: yaw + ground-plane (x, z), matches the benchmark perturbation; 6dof: SO(3) x R^3
+  trans_scale: 6.0      # metres; translations are divided by this inside losses/network (prior std = 1 in these units)
+
+model:
+  d_model: 256
+  depth: 6
+  heads: 8
+  mlp_ratio: 4.0
+  cross_attn_layers: 2  # first k blocks also cross-attend to pooled image tokens (global context)
+  img_pool: 2           # 20x64 coarse map -> 10x32 = 320 image tokens
+  n_points: 512         # superpoint tokens per hypothesis (of 1280)
+  point_select: sample  # sample (score-weighted, train) | topk | random; eval always uses topk
+  self_cond: true
+  amp: bf16             # bf16 | fp16 | none (transformer only; geometry stays fp32)
+
+flow:
+  samples_per_frame: 32 # pose hypotheses (tau, prior draws) per frame per step
+  time_sampling: {kind: mixture, uniform_frac: 0.2, beta_a: 1.9, beta_b: 1.0, t_min: 0.01, t_max: 0.99}
+  loss_weighting: velocity   # velocity: 1/(1-min(tau, clip))^2 ; endpoint: 1
+  weight_clip: 0.9
+  lambda_rot: 1.0
+  lambda_trans: 1.0
+  self_cond_prob: 0.5
+
+gaussian:
+  min_std: 0.002        # floor on tangent std (rad / normalised translation)
+
+inference:
+  steps: 10
+  t_min: 0.01
+  rot_anneal: 0.0       # 0 = calibrated probability flow; 5-10 = FrameFlow-style annealing (accuracy mode, no NLL)
+  chunk: 64             # hypotheses integrated in parallel per frame
+  nll_steps: 20
+  nll_tau_end: 0.99
+
+train:
+  frames_per_step: 4
+  total_steps: 60000
+  lr: 1.0e-4
+  min_lr_ratio: 0.05
+  warmup_steps: 1000
+  weight_decay: 0.0
+  betas: [0.9, 0.999]
+  grad_clip: 1.0
+  ema_decay: 0.999
+  log_every: 50
+  val_every: 2500
+  ckpt_every: 2500
+  select_metric: acc    # metric on the validation split used to keep best.pt
+  select_mode: max
+
+eval:
+  frames_per_batch: 4
+  n_samples: 64
+  val_max_frames: 400
+  max_modes: 5
+  mode_eps_rot_deg: 5.0
+  mode_eps_trans: 1.5
+  kde_bw_rot_deg: 2.0
+  kde_bw_trans: 0.5
+  exact_nll: false      # exact reverse-ODE NLL of the GT (flow head); turn on in scripts/evaluate.py runs
