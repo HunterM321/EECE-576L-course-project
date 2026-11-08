@@ -1,0 +1,199 @@
+\begin{thebibliography}{26}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Bose et~al.(2024)Bose, Akhound-Sadegh, Huguet, Fatras, Rector-Brooks,
+  et~al.]{bose2024foldflow}
+Avishek~Joey Bose, Tara Akhound-Sadegh, Guillaume Huguet, Kilian Fatras, Jarrid
+  Rector-Brooks, et~al.
+\newblock {SE(3)}-stochastic flow matching for protein backbone generation.
+\newblock In \emph{ICLR}, 2024.
+\newblock arXiv:2310.02391.
+
+\bibitem[Caesar et~al.(2020)Caesar, Bankiti, Lang, Vora, Liong,
+  et~al.]{caesar2020nuscenes}
+Holger Caesar, Varun Bankiti, Alex~H. Lang, Sourabh Vora, Venice~Erin Liong,
+  et~al.
+\newblock {nuScenes}: A multimodal dataset for autonomous driving.
+\newblock In \emph{CVPR}, 2020.
+\newblock arXiv:1903.11027.
+
+\bibitem[Cattaneo and Valada(2025)]{cattaneo2025cmrnext}
+Daniele Cattaneo and Abhinav Valada.
+\newblock {CMRNext}: Camera to {LiDAR} matching in the wild for localization
+  and extrinsic calibration.
+\newblock \emph{IEEE Transactions on Robotics}, 2025.
+\newblock arXiv:2402.00129.
+
+\bibitem[Cattaneo et~al.(2019)Cattaneo, Vaghi, Ballardini, Fontana, Sorrenti,
+  and Burgard]{cattaneo2019cmrnet}
+Daniele Cattaneo, Matteo Vaghi, Augusto~Luis Ballardini, Simone Fontana,
+  Domenico~Giorgio Sorrenti, and Wolfram Burgard.
+\newblock {CMRNet}: Camera to {LiDAR}-map registration.
+\newblock In \emph{IEEE Intelligent Transportation Systems Conference (ITSC)},
+  pages 1283--1289, 2019.
+
+\bibitem[Chen et~al.(2022)Chen, Wang, Wang, Tian, Xiong, and
+  Li]{chen2022epropnp}
+Hansheng Chen, Pichao Wang, Fan Wang, Wei Tian, Lu~Xiong, and Hao Li.
+\newblock {EPro-PnP}: Generalized end-to-end probabilistic perspective-n-points
+  for monocular object pose estimation.
+\newblock In \emph{CVPR}, 2022.
+\newblock arXiv:2203.13254.
+
+\bibitem[Chen and Lipman(2024)]{chen2024riemannian}
+Ricky T.~Q. Chen and Yaron Lipman.
+\newblock Flow matching on general geometries.
+\newblock In \emph{ICLR}, 2024.
+\newblock arXiv:2302.03660.
+
+\bibitem[Geiger et~al.(2012)Geiger, Lenz, and Urtasun]{geiger2012kitti}
+Andreas Geiger, Philip Lenz, and Raquel Urtasun.
+\newblock Are we ready for autonomous driving? the {KITTI} vision benchmark
+  suite.
+\newblock In \emph{CVPR}, 2012.
+
+\bibitem[Jiang et~al.(2023)Jiang, Salzmann, Dang, Xie, and
+  Yang]{jiang2023se3diffreg}
+Haobo Jiang, Mathieu Salzmann, Zheng Dang, Jin Xie, and Jian Yang.
+\newblock {SE(3)} diffusion model-based point cloud registration for robust
+  {6D} object pose estimation.
+\newblock In \emph{NeurIPS}, 2023.
+\newblock arXiv:2310.17359.
+
+\bibitem[Jin et~al.(2025)Jin, Funk, Prasad, Li, Franzius,
+  et~al.]{jin2025se3poseflow}
+Yufeng Jin, Niklas Funk, Vignesh Prasad, Zechu Li, Mathias Franzius, et~al.
+\newblock {SE(3)-PoseFlow}: Estimating {6D} pose distributions for
+  uncertainty-aware robotic manipulation.
+\newblock \emph{arXiv preprint arXiv:2511.01501}, 2025.
+
+\bibitem[Kang et~al.(2024)Kang, Liao, Li, Liang, Li, et~al.]{kang2024cofii2p}
+Shuhao Kang, Youqi Liao, Jianping Li, Fuxun Liang, Yuhao Li, et~al.
+\newblock {CoFiI2P}: Coarse-to-fine correspondences for image-to-point cloud
+  registration.
+\newblock \emph{IEEE Robotics and Automation Letters}, 2024.
+\newblock arXiv:2309.14660.
+
+\bibitem[Krummenacher et~al.(2025)Krummenacher, Frey, Tuna, Vysotska, and
+  Hutter]{krummenacher2025diffpr}
+Benjamin Krummenacher, Jonas Frey, Turcan Tuna, Olga Vysotska, and Marco
+  Hutter.
+\newblock Diffusion based robust {LiDAR} place recognition.
+\newblock In \emph{ICRA}, 2025.
+\newblock arXiv:2504.12412.
+
+\bibitem[Kuczkowski and Ruotsalainen(2026)]{kuczkowski2026posefm}
+Dominik Kuczkowski and Laura Ruotsalainen.
+\newblock {PoseFM}: Relative camera pose estimation through flow matching.
+\newblock \emph{arXiv preprint arXiv:2604.22350}, 2026.
+
+\bibitem[Li et~al.(2025)Li, Yang, Deng, Cheng, Zhou, and Zhang]{li2025icli2p}
+Xinjun Li, Wenfei Yang, Jiacheng Deng, Zhixin Cheng, Xu~Zhou, and Tianzhu
+  Zhang.
+\newblock Implicit correspondence learning for image-to-point cloud
+  registration.
+\newblock In \emph{CVPR}, pages 16922--16931, 2025.
+
+\bibitem[Lipman et~al.(2023)Lipman, Chen, Ben-Hamu, Nickel, and
+  Le]{lipman2023flow}
+Yaron Lipman, Ricky T.~Q. Chen, Heli Ben-Hamu, Maximilian Nickel, and Matt Le.
+\newblock Flow matching for generative modeling.
+\newblock In \emph{ICLR}, 2023.
+\newblock arXiv:2210.02747.
+
+\bibitem[Liu et~al.(2023)Liu, Gong, and Liu]{liu2023rectified}
+Xingchao Liu, Chengyue Gong, and Qiang Liu.
+\newblock Flow straight and fast: Learning to generate and transfer data with
+  rectified flow.
+\newblock In \emph{ICLR}, 2023.
+\newblock arXiv:2209.03003.
+
+\bibitem[Mu et~al.(2025)Mu, Ren, Zhang, Pan, Zhang, et~al.]{mu2025diff2i2p}
+Juncheng Mu, Chengwei Ren, Weixiang Zhang, Liang Pan, Xiao-Ping Zhang, et~al.
+\newblock {Diff$^2$I2P}: Differentiable image-to-point cloud registration with
+  diffusion prior.
+\newblock In \emph{ICCV}, 2025.
+\newblock arXiv:2507.06651.
+
+\bibitem[Murphy et~al.(2021)Murphy, Esteves, Jampani, Ramalingam, and
+  Makadia]{murphy2021ipdf}
+Kieran Murphy, Carlos Esteves, Varun Jampani, Srikumar Ramalingam, and Ameesh
+  Makadia.
+\newblock {Implicit-PDF}: Non-parametric representation of probability
+  distributions on the rotation manifold.
+\newblock In \emph{ICML}, 2021.
+\newblock arXiv:2106.05965.
+
+\bibitem[Ou et~al.(2025)Ou, Chen, Zhang, and Wang]{ou2025diffcalib}
+Ni~Ou, Zhuo Chen, Xinru Zhang, and Junzheng Wang.
+\newblock Iterative camera-{LiDAR} extrinsic optimization via surrogate
+  diffusion.
+\newblock In \emph{IEEE/RSJ International Conference on Intelligent Robots and
+  Systems (IROS)}, 2025.
+\newblock arXiv:2506.14706.
+
+\bibitem[Ren et~al.(2023)Ren, Zeng, Hou, and Chen]{ren2022corri2p}
+Siyu Ren, Yiming Zeng, Junhui Hou, and Xiaodong Chen.
+\newblock {CorrI2P}: Deep image-to-point cloud registration via dense
+  correspondence.
+\newblock \emph{IEEE Transactions on Circuits and Systems for Video
+  Technology}, 2023.
+\newblock arXiv:2207.05483.
+
+\bibitem[Sol{\`a} et~al.(2018)Sol{\`a}, Deray, and Atchuthan]{sola2018micro}
+Joan Sol{\`a}, Jeremie Deray, and Dinesh Atchuthan.
+\newblock A micro {Lie} theory for state estimation in robotics.
+\newblock \emph{arXiv preprint arXiv:1812.01537}, 2018.
+
+\bibitem[Tran et~al.(2026)Tran, Le, Dehdarirad, Viksten, and
+  Forss{\'e}n]{tran2026quacamfm}
+Bao-Long Tran, Cuong Le, Tahereh Dehdarirad, Fredrik Viksten, and Per-Erik
+  Forss{\'e}n.
+\newblock {QuacamFM}: Quaternion-constrained flow matching for camera pose
+  estimation.
+\newblock \emph{arXiv preprint arXiv:2609.32455}, 2026.
+
+\bibitem[Vaghi et~al.(2022)Vaghi, Ballardini, Fontana, and
+  Sorrenti]{vaghi2022uncertainty}
+Matteo Vaghi, Augusto~Luis Ballardini, Simone Fontana, and Domenico~Giorgio
+  Sorrenti.
+\newblock Uncertainty-aware {DNN} for multi-modal camera localization.
+\newblock \emph{arXiv preprint arXiv:2211.01234}, 2022.
+
+\bibitem[Wang et~al.(2023)Wang, Rupprecht, and Novotny]{wang2023posediffusion}
+Jianyuan Wang, Christian Rupprecht, and David Novotny.
+\newblock {PoseDiffusion}: Solving pose estimation via diffusion-aided bundle
+  adjustment.
+\newblock In \emph{ICCV}, 2023.
+\newblock arXiv:2306.15667.
+
+\bibitem[Wang et~al.(2025)Wang, Shi, Wang, Yu, Chen,
+  et~al.]{wang2025bevdiffloc}
+Ziyue Wang, Chenghao Shi, Neng Wang, Qinghua Yu, Xieyuanli Chen, et~al.
+\newblock {BEVDiffLoc}: End-to-end {LiDAR} global localization in {BEV} view
+  based on diffusion model.
+\newblock In \emph{IEEE/RSJ International Conference on Intelligent Robots and
+  Systems (IROS)}, 2025.
+\newblock arXiv:2503.11372.
+
+\bibitem[Yim et~al.(2023)Yim, Trippe, De~Bortoli, Mathieu, Doucet,
+  et~al.]{yim2023framediff}
+Jason Yim, Brian~L. Trippe, Valentin De~Bortoli, Emile Mathieu, Arnaud Doucet,
+  et~al.
+\newblock {SE(3)} diffusion model with application to protein backbone
+  generation.
+\newblock In \emph{ICML}, 2023.
+\newblock arXiv:2302.02277.
+
+\bibitem[Zhou et~al.(2023)Zhou, Ma, Zhang, Fang, Liu, et~al.]{zhou2023vp2p}
+Junsheng Zhou, Baorui Ma, Wenyuan Zhang, Yi~Fang, Yu-Shen Liu, et~al.
+\newblock Differentiable registration of images and {LiDAR} point clouds with
+  {VoxelPoint}-to-pixel matching.
+\newblock In \emph{NeurIPS}, 2023.
+\newblock arXiv:2312.04060.
+
+\end{thebibliography}

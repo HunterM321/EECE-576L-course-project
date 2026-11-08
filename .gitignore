@@ -7,4 +7,4 @@ results/**/upstream_eval_*/
 data/
 checkpoints/
 third_party/
-proposal/
+.DS_Store
