@@ -13,6 +13,20 @@ from i2pflow.geometry import so3
 from i2pflow.models.backbone import load_cofii2p
 
 _FAIL_STD = (np.pi, 10.0)  # rad, m used when PnP fails
+_FAIL_COV = np.diag([_FAIL_STD[0] ** 2] * 3 + [_FAIL_STD[1] ** 2] * 3)
+_MIN_VAR = 1e-8  # floor on covariance eigenvalues (rad^2 / m^2); keeps float32 Cholesky stable
+
+
+def _well_conditioned(cov):
+    """Symmetric PD version of `cov`: eigenvalues clipped to [_MIN_VAR, failure variance].
+
+    Degenerate inlier sets (few or near-collinear points, zero residual) give singular or indefinite J^T J
+    inverses, which crash the Cholesky used for sampling."""
+    if not np.all(np.isfinite(cov)):
+        return _FAIL_COV.copy()
+    w, V = np.linalg.eigh(0.5 * (cov + cov.T))
+    w = np.clip(w, _MIN_VAR, _FAIL_STD[1] ** 2)
+    return (V * w) @ V.T
 
 
 class CoFiI2PPnP:
@@ -42,7 +56,7 @@ class CoFiI2PPnP:
                                                      reprojectionError=self.reproj_error)
         n = len(obj_pts)
         if not ok or inliers is None or len(inliers) < 4:
-            cov = np.diag([_FAIL_STD[0] ** 2] * 3 + [_FAIL_STD[1] ** 2] * 3)
+            cov = _FAIL_COV.copy()
             return {"T": np.eye(4), "success": False, "inlier_ratio": 0.0, "n_corr": n, "cov": cov}
         R, _ = cv2.Rodrigues(rvec)
         T = np.eye(4)
@@ -62,10 +76,10 @@ class CoFiI2PPnP:
         try:
             cov_param = sigma2 * np.linalg.inv(J.T @ J)
         except np.linalg.LinAlgError:
-            return np.diag([_FAIL_STD[0] ** 2] * 3 + [_FAIL_STD[1] ** 2] * 3)
+            return _FAIL_COV.copy()
         # rvec perturbation -> camera-frame (left) rotation perturbation: a = J_l(rvec) d_rvec
         Jl = so3.left_jacobian(torch.from_numpy(rvec[:, 0])).numpy()
         A = np.zeros((6, 6))
         A[:3, :3] = Jl
         A[3:, 3:] = np.eye(3)
-        return A @ cov_param @ A.T
+        return _well_conditioned(A @ cov_param @ A.T)

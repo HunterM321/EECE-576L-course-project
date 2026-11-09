@@ -86,7 +86,7 @@ def evaluate_pnp(pnp, loader, space, ec, device, max_frames=None, save_samples=F
         T_est = torch.tensor(np.stack([r["T"] for r in res]), device=device, dtype=torch.float32)
         cov = torch.tensor(np.stack([r["cov"] for r in res]), device=device, dtype=torch.float32)
         R_est, t_est = so3.from_matrix(T_est)
-        L = torch.linalg.cholesky(cov + 1e-9 * torch.eye(6, device=device))
+        L = torch.linalg.cholesky(cov.double()).float()  # cov is PD by construction; float64 for wide spectra
         z = (L[:, None] @ torch.randn(len(res), ec.n_samples, 6, 1, device=device))[..., 0]
         R_s = so3.exp(z[..., :3]) @ R_est[:, None]
         t_s = t_est[:, None] + z[..., 3:]
