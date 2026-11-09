@@ -11,7 +11,10 @@ from i2pflow.geometry import so3
 from i2pflow.paths import PROJECT_ROOT
 
 pytestmark = pytest.mark.skipif(not torch.cuda.is_available(), reason="needs a GPU")
-UPSTREAM = PROJECT_ROOT / "results/baselines/cofii2p_pnp/kitti/upstream_eval_20261020"
+# Per-frame dumps of upstream eval_all.py (gitignored; regenerate with scripts/slurm/upstream_eval.sbatch kitti).
+_UPSTREAM_DIRS = sorted(p for p in (PROJECT_ROOT / "results/baselines/cofii2p_pnp/kitti").glob("upstream_eval_*")
+                        if p.is_dir())
+UPSTREAM = _UPSTREAM_DIRS[-1] if _UPSTREAM_DIRS else None
 
 
 @pytest.fixture(scope="module")
@@ -81,6 +84,8 @@ def test_head_loss_backward_sample_likelihood(setup, method):
 
 
 def test_pnp_baseline_reproduces_upstream_frame(setup):
+    if UPSTREAM is None:
+        pytest.skip("no upstream eval dumps; run sbatch scripts/slurm/upstream_eval.sbatch kitti")
     cfg, dev, opt, _, samples, _ = setup
     from i2pflow.baselines.pnp_ransac import CoFiI2PPnP
     pnp = CoFiI2PPnP(opt, cfg.backbone.ckpt, dev)

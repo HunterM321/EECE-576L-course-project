@@ -1,10 +1,11 @@
 __pycache__/
 *.pyc
 .pytest_cache/
-runs/
+/runs/
 results/**/*.npz
 results/**/upstream_eval_*/
-data/
-checkpoints/
-third_party/
+/data/
+/checkpoints/
+/third_party/
 .DS_Store
+/logs/
