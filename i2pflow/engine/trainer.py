@@ -41,6 +41,39 @@ def _amp_dtype(name):
     return {"bf16": torch.bfloat16, "fp16": torch.float16, "none": None}[name]
 
 
+class WandbLogger:
+    """Thin wrapper so the trainer runs unchanged with wandb off. Resuming a run directory continues its wandb run."""
+
+    def __init__(self, cfg, out_dir):
+        wc = cfg.get("wandb") or {}
+        self.run = None
+        if not wc.get("enabled", False) or wc.get("mode") == "disabled":
+            return
+        import wandb
+        id_file = out_dir / "wandb_id.txt"
+        run_id = id_file.read_text().strip() if id_file.exists() else wandb.util.generate_id()
+        id_file.write_text(run_id)
+        self.run = wandb.init(project=wc.get("project", "i2pflow"), entity=wc.get("entity"), name=out_dir.name,
+                              id=run_id, resume="allow", dir=str(out_dir), mode=wc.get("mode", "online"),
+                              tags=list(wc.get("tags") or []) + [cfg.method, cfg.data.dataset, cfg.pose.dof],
+                              config=cfg.to_dict())
+        self.run.define_metric("train/step")
+        self.run.define_metric("val/*", step_metric="train/step")
+        self.run.define_metric("train/*", step_metric="train/step")
+
+    def log(self, metrics, step):
+        if self.run is not None:
+            self.run.log({**metrics, "train/step": step})
+
+    def summary(self, **kv):
+        if self.run is not None:
+            self.run.summary.update(kv)
+
+    def finish(self):
+        if self.run is not None:
+            self.run.finish()
+
+
 class Trainer:
     def __init__(self, cfg, out_dir, resume=None):
         self.cfg = cfg
@@ -67,7 +100,10 @@ class Trainer:
         self.train_loader = build_loader(cfg, "train")
         self.val_loader = build_loader(cfg, "val", shuffle=False, batch_size=cfg.eval.frames_per_batch)
         self.writer = SummaryWriter(str(self.out_dir / "tb"))
+        self.wb = WandbLogger(cfg, self.out_dir)
         n_params = sum(p.numel() for p in self.head.parameters())
+        self.wb.summary(head_params=n_params, train_frames=len(self.train_loader.dataset),
+                        val_frames=len(self.val_loader.dataset))
         print(f"head: {cfg.method}, {n_params / 1e6:.2f}M params | train frames {len(self.train_loader.dataset)}"
               f" | val frames {len(self.val_loader.dataset)} | out {self.out_dir}", flush=True)
 
@@ -119,9 +155,10 @@ class Trainer:
         res = evaluate_head(model, self.backbone, self.val_loader, self.space, ec, self.device,
                             max_frames=ec.val_max_frames, log_every=0)
         summ = summarize(res, self.space)
-        for k, v in summ.items():
-            if isinstance(v, (int, float)) and math.isfinite(v):
-                self.writer.add_scalar(f"val/{k}", v, self.step)
+        scalars = {f"val/{k}": v for k, v in summ.items() if isinstance(v, (int, float)) and math.isfinite(v)}
+        for k, v in scalars.items():
+            self.writer.add_scalar(k, v, self.step)
+        self.wb.log(scalars, self.step)
         print(f"[val step {self.step}] {format_summary(summ)}", flush=True)
         with open(self.out_dir / "val_log.jsonl", "a") as f:
             f.write(json.dumps({"step": self.step, **summ}) + "\n")
@@ -143,6 +180,8 @@ class Trainer:
                     for k, v in means.items():
                         self.writer.add_scalar(f"train/{k}", v, self.step)
                     dt = (time.time() - t_last) / tc.log_every
+                    self.wb.log({**{f"train/{k}": v for k, v in means.items()}, "train/sec_per_it": dt,
+                                 "train/frames_per_sec": tc.frames_per_step / max(dt, 1e-9)}, self.step)
                     print(f"step {self.step}/{tc.total_steps}  {dt:.2f}s/it  " +
                           "  ".join(f"{k}={v:.4g}" for k, v in means.items()), flush=True)
                     acc, t_last = {}, time.time()
@@ -152,11 +191,14 @@ class Trainer:
                     if metric > self.best:
                         self.best = metric
                         self.save("best.pt")
+                        self.wb.summary(**{f"best/{tc.select_metric}": summ[tc.select_metric],
+                                           "best/step": self.step})
                 if self.step % tc.ckpt_every == 0 or self.step == tc.total_steps:
                     self.save("last.pt")
                 if self.step >= tc.total_steps:
                     break
         self.writer.close()
+        self.wb.finish()
 
 
 def load_head_for_eval(ckpt_path, cfg, device, use_ema=True):

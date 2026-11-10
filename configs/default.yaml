@@ -5,6 +5,13 @@ method: flow            # flow | gaussian   (the PnP-RANSAC baseline runs via sc
 seed: 0
 output_root: runs
 
+wandb:
+  enabled: true
+  project: i2pflow
+  entity: null          # null = your default wandb entity
+  mode: online          # online | offline (sync later: wandb sync runs/<name>/wandb/offline-run-*) | disabled
+  tags: []
+
 data:
   dataset: kitti
   root: data/kitti      # symlink -> /data/masibo/cofii2p/kitti

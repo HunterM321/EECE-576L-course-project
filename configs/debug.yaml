@@ -1,5 +1,7 @@
 # Tiny configuration for smoke tests (few frames, small model, frequent validation).
 _base_: kitti_flow.yaml
+wandb:
+  project: i2pflow-debug
 data:
   num_workers: 4
   max_train_frames: 64

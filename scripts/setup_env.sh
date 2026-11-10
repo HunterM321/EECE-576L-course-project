@@ -19,7 +19,7 @@ pipi() { $UV pip install --python "$E/bin/python" "$@"; }
 pipi --no-build torch==1.13.1+cu116 torchvision==0.14.1+cu116 \
   --extra-index-url https://download.pytorch.org/whl/cu116 --index-strategy unsafe-best-match
 pipi --no-build open3d==0.17.0 "opencv-python<5" "numpy<1.25" scipy tqdm easydict einops tensorboardX \
-  "tensorboard<2.15" matplotlib pyyaml pytest ninja
+  "tensorboard<2.15" matplotlib pyyaml pytest ninja wandb
 # pure-Python sdists (no compilation)
 pipi fvcore pyquaternion nuscenes-devkit
 $UV pip freeze --python "$E/bin/python" > "$(dirname "$0")/../results/env_freeze.txt"
