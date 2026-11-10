@@ -23,9 +23,12 @@ class EMA:
             p.requires_grad_(False)
 
     @torch.no_grad()
-    def update(self, model):
+    def update(self, model, step=None):
+        # warmup (as in TF/timm): the average starts near the live weights instead of carrying the random init
+        # (with a fixed 0.999, 37% of the init is still in the EMA after 1k steps)
+        d = self.decay if step is None else min(self.decay, (1 + step) / (10 + step))
         for e, p in zip(self.model.parameters(), model.parameters()):
-            e.mul_(self.decay).add_(p.detach(), alpha=1 - self.decay)
+            e.mul_(d).add_(p.detach(), alpha=1 - d)
         for e, b in zip(self.model.buffers(), model.buffers()):
             e.copy_(b)
 
@@ -144,7 +147,7 @@ class Trainer:
         self.scaler.step(self.optim)
         self.scaler.update()
         if self.ema:
-            self.ema.update(self.head)
+            self.ema.update(self.head, self.step)
         logs["grad_norm"] = gnorm
         logs["lr"] = torch.tensor(self.optim.param_groups[0]["lr"])
         return logs

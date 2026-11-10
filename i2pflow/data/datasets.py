@@ -159,7 +159,8 @@ def collate_list(samples):
 def build_loader(cfg, split, shuffle=None, batch_size=None):
     ds = build_dataset(cfg, split)
     train = split == "train"
-    nw = cfg.data.num_workers
+    # eval loaders run alongside the (persistent) train workers, at ~1.5 GB RSS each: keep them few
+    nw = cfg.data.num_workers if train else cfg.data.get("eval_num_workers", cfg.data.num_workers)
     return torch.utils.data.DataLoader(
         ds,
         batch_size=batch_size or (cfg.train.frames_per_step if train else cfg.eval.frames_per_batch),
@@ -168,7 +169,7 @@ def build_loader(cfg, split, shuffle=None, batch_size=None):
         num_workers=nw,
         collate_fn=collate_list,
         persistent_workers=nw > 0,
-        prefetch_factor=4 if nw > 0 else None,
+        prefetch_factor=cfg.data.get("prefetch_factor", 2) if nw > 0 else None,  # batches buffered per worker
     )
 
 

@@ -18,7 +18,9 @@ data:
   train_seqs: [0, 1, 2, 3, 4, 5, 6, 7, 8]
   test_seqs: [9, 10]
   val_fraction: 0.05    # last 5% of each training sequence held out for validation / model selection
-  num_workers: 32       # CoFiI2P preprocessing is CPU-heavy (~0.6 s/frame/worker)
+  num_workers: 32       # CoFiI2P preprocessing is CPU-heavy (~0.6 s/frame/worker); 24 workers is CPU-bound (1.37 vs 0.85 s/step)
+  prefetch_factor: 2    # batches buffered per worker (4 pushed RSS to the 120G limit)
+  eval_num_workers: 8   # val/test loaders (in training they coexist with the train workers; ~1.5 GB each)
   max_train_frames: null
   max_val_frames: null
   max_test_frames: null

@@ -50,6 +50,7 @@ def main():
     device = torch.device("cuda")
     space = build_space(cfg)
     opt = build_options(cfg)
+    cfg.data.eval_num_workers = cfg.data.num_workers  # no train workers alongside: use them all
     loader = build_loader(cfg, args.split, shuffle=False, batch_size=cfg.eval.frames_per_batch)
     limit = cfg.data.get(f"max_{args.split}_frames")
 

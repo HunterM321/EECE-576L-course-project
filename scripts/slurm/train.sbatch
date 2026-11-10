@@ -2,7 +2,7 @@
 #SBATCH --account=aip-rjliao
 #SBATCH --gres=gpu:l40s:1
 #SBATCH --cpus-per-task=32
-#SBATCH --mem=96G
+#SBATCH --mem=120G
 #SBATCH --time=24:00:00
 #SBATCH --job-name=train
 #SBATCH --output=logs/%x-%j.out
